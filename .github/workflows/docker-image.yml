@@ -13,6 +13,7 @@ jobs:
     - name: Checkout selected tag
       uses: actions/checkout@v4
       with:
+        fetch-depth: 0
         fetch-tags: 'true'
     - name: Output latest tag
       run: echo `pwd`; echo "$(git describe --tags --abbrev=0)"
