@@ -1,0 +1,20 @@
+name: Build snac2 Docker image and push to the registry
+
+on:
+  workflow_dispatch
+
+jobs:
+
+  buildpush:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout selected tag
+      uses: actions/checkout@v4
+    - name: Login to GitHub packages registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag snac2:$(git tag -l | sort -r | head -n 1)
+    - name: Push built Docker image to the registry
+      run: docker push ghcr.io/${{ github.repository_owner }}/snac2:$(git tag -l | sort -r | head -n 1)
