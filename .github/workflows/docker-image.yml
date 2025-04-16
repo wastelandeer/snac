@@ -51,6 +51,7 @@ jobs:
       run: |
         tar -xzf 2.75.tar.gz
         cd snac2
+        echo `pwd`; echo `ls`
       
     - name: Login to GitHub packages registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
