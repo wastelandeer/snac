@@ -1,0 +1,28 @@
+name: Checkout selected or the last tag
+description: Checkout selected or the last tag
+inputs:
+  tag:
+    description: "Tag selected in workflow or the latest tag"
+    type: string
+    
+runs:
+  using: composite
+  steps:
+    # - name: Init empty repository
+    #   run: /usr/bin/git init /home/runner/work/snac/snac
+    # - name: Set repository upstream
+    #   run: /usr/bin/git remote add origin https://github.com/${GITHUB_REPOSITORY}
+    # - name: Fetch repository
+    #   run: /usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+    # - name: Check selected or latest tag
+    #   run: |
+    #     TAG=${{ inputs.tag | rev | cut -d "/" -f1 | rev }}
+    #     echo $TAG
+    - name: Checkout at selected tag
+      if: ${{ ! inputs.tag == 'latest' }}
+      run: /usr/bin/git checkout $TAG
+      shell: bash
+    - name: Checkout at the latest tag
+      if: inputs.tag == 'latest'
+      run: /usr/bin/git checkout $(git describe --tags --abbrev=0)
+      shell: bash
